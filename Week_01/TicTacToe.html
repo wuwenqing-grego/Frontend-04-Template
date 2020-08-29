@@ -9,6 +9,7 @@
 
         line-height: 100px;
         font-size: 50px;
+        color: red;
         text-align: center;
     }
 </style>
@@ -27,7 +28,7 @@
     function show() {
         let board = document.getElementById('board')
         board.innerHTML = ''
-        
+
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
                 let cell = document.createElement('div')
@@ -44,9 +45,30 @@
 
     function move(i, j) {
         pattern[i][j] = color
+        if (check()) {
+            alert(color == 2 ? 'X is the winner!' : 'O is the winner!')
+        }
         color = 3 - color
-        show(pattern)
+        show()
     }
 
-    show(pattern)
+    function check() {
+        let diagWinner = [true, true]
+        for (let i = 0; i < 3; i++) {
+            let rowWinner = true
+            let colWinner = true
+            for (let j = 0; j < 3; j++) {
+                rowWinner &= pattern[i][j] == color
+                colWinner &= pattern[j][i] == color
+            }
+            if (rowWinner || colWinner) {return true}
+
+            diagWinner[0] &= pattern[i][i] == color
+            diagWinner[1] &= pattern[i][2 - i] == color
+        }
+
+        return diagWinner[0] || diagWinner[1] ? true : false
+    }
+
+    show()
 </script>
