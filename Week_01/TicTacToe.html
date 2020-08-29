@@ -18,12 +18,16 @@
 <script>
     let pattern = [
         [0, 0, 0],
-        [0, 2, 0],
-        [0, 1, 0]
+        [0, 0, 0],
+        [0, 0, 0]
     ]
+
+    let color = 1
 
     function show() {
         let board = document.getElementById('board')
+        board.innerHTML = ''
+        
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
                 let cell = document.createElement('div')
@@ -31,10 +35,17 @@
                 cell.innerText = 
                     pattern[i][j] == 2 ? 'X' :
                     pattern[i][j] == 1 ? 'O' : ''
+                cell.addEventListener('click', () => move(i, j))
                 board.appendChild(cell)
             }
             board.appendChild(document.createElement('br'))
         }
+    }
+
+    function move(i, j) {
+        pattern[i][j] = color
+        color = 3 - color
+        show(pattern)
     }
 
     show(pattern)
