@@ -45,14 +45,18 @@
 
     function move(i, j) {
         pattern[i][j] = color
-        if (check()) {
+        show()
+        if (check(pattern, color)) {
             alert(color == 2 ? 'X is the winner!' : 'O is the winner!')
+            return
         }
         color = 3 - color
-        show()
+        if (willWin(pattern, color)) {
+            alert(color == 2 ? 'X will win!' : 'O will win!')
+        }
     }
 
-    function check() {
+    function check(pattern, color) {
         let diagWinner = [true, true]
         for (let i = 0; i < 3; i++) {
             let rowWinner = true
@@ -69,6 +73,26 @@
 
         return diagWinner[0] || diagWinner[1] ? true : false
     }
+    
+    function willWin(pattern, color) {
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (pattern[i][j]) {continue}
+                pattern[i][j] = color
+                if (check(pattern, color)) {
+                    pattern[i][j] = 0
+                    return true
+                }
+                pattern[i][j] = 0
+            }
+        }
+        
+        return false
+    }
+    
+    // function clone(pattern) {
+    //     return JSON.parse(JSON.stringify(pattern))
+    // }
 
     show()
 </script>
