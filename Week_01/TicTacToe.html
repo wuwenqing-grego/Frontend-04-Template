@@ -36,14 +36,14 @@
                 cell.innerText = 
                     pattern[i][j] == 2 ? 'X' :
                     pattern[i][j] == 1 ? 'O' : ''
-                cell.addEventListener('click', () => move(i, j))
+                cell.addEventListener('click', () => userMove(i, j))
                 board.appendChild(cell)
             }
             board.appendChild(document.createElement('br'))
         }
     }
 
-    function move(i, j) {
+    function userMove(i, j) {
         pattern[i][j] = color
         show()
         if (check(pattern, color)) {
@@ -51,7 +51,18 @@
             return
         }
         color = 3 - color
-        console.log(bestChoice(pattern, color))
+        computerMove()
+    }
+
+    function computerMove() {
+        let choice = bestChoice(pattern, color).point
+        if (choice) {pattern[choice[0]][choice[1]] = color}
+        show()
+        if (check(pattern, color)) {
+            alert(color == 2 ? 'X is the winner!' : 'O is the winner!')
+            return
+        }
+        color = 3 - color
     }
 
     function check(pattern, color) {
@@ -98,7 +109,7 @@
         }
         let result = -2
 
-        for (let i = 0; i < 3; i++) {
+        outer: for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
                 if (pattern[i][j]) {continue}
                 pattern[i][j] = color
@@ -109,6 +120,7 @@
                     result = -opponent
                     point = [i, j]
                 }
+                if (result == 1) {break outer}
             }
         }
 
