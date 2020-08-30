@@ -51,9 +51,7 @@
             return
         }
         color = 3 - color
-        if (willWin(pattern, color)) {
-            alert(color == 2 ? 'X will win!' : 'O will win!')
-        }
+        console.log(bestChoice(pattern, color))
     }
 
     function check(pattern, color) {
@@ -81,13 +79,43 @@
                 pattern[i][j] = color
                 if (check(pattern, color)) {
                     pattern[i][j] = 0
-                    return true
+                    return [i, j]
                 }
                 pattern[i][j] = 0
             }
         }
         
-        return false
+        return null
+    }
+
+    function bestChoice(pattern, color) {
+        let point = willWin(pattern, color)
+        if (point) {
+            return {
+                point: point,
+                result: 1
+            }
+        }
+        let result = -2
+
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (pattern[i][j]) {continue}
+                pattern[i][j] = color
+                let opponent = bestChoice(pattern, 3 - color).result
+                pattern[i][j] = 0
+
+                if (-opponent > result) {
+                    result = -opponent
+                    point = [i, j]
+                }
+            }
+        }
+
+        return {
+            point: point,
+            result: point ? result : 0
+        }
     }
     
     // function clone(pattern) {
