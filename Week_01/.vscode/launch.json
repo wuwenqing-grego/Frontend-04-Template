@@ -8,7 +8,7 @@
             "type": "pwa-chrome",
             "request": "launch",
             "name": "Open TicTacToe.html",
-            "file": "/Users/wutongxue/Documents/Frontend/Homework/Frontend-04-Template/Week_01/TicTacToe.html"
+            "file": "/Users/wutongxue/Documents/Frontend/Homework/Frontend-04-Template/Week_01/TrafficLight_async.html"
         }
     ]
 }

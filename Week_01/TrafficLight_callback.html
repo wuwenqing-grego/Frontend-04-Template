@@ -1,0 +1,62 @@
+<style>
+    div {
+        width: 100px;
+        height: 100px;
+        margin: 30px;
+        border-radius: 50px;
+        display: inline-block;
+        background-color: grey;
+    }
+    .red.light {
+        background-color: red;
+    }
+    .yellow.light {
+        background-color: yellow;
+    }
+    .green.light {
+        background-color: green;
+    }
+</style>
+
+<div class="red"></div>
+<div class="yellow"></div>
+<div class="green"></div>
+
+<script>
+    function red() {
+        let lights = document.getElementsByTagName('div')
+        for (let light of lights) {
+            light.classList.remove('light')
+        }
+        document.getElementsByClassName('red')[0].classList.add('light')
+    }
+    function yellow() {
+        let lights = document.getElementsByTagName('div')
+        for (let light of lights) {
+            light.classList.remove('light')
+        }
+        document.getElementsByClassName('yellow')[0].classList.add('light')
+    }
+    function green() {
+        let lights = document.getElementsByTagName('div')
+        for (let light of lights) {
+            light.classList.remove('light')
+        }
+        document.getElementsByClassName('green')[0].classList.add('light')
+    }
+
+    function go() {
+        green()
+        setTimeout(() => {
+            yellow()
+            setTimeout(() => {
+                red()
+                setTimeout(() => {
+                    go()
+                }, 5000)
+            }, 2000)
+        }, 10000)
+    }
+
+    go()
+</script>
