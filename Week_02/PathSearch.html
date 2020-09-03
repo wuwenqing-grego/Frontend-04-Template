@@ -54,4 +54,29 @@
     })
     document.addEventListener('mouseup', () => mousedown = false)
     document.addEventListener('contextmenu', e => e.preventDefault())
+
+
+    const direc = [[1, 0], [-1, 0], [0, 1], [0, -1]]
+
+    function path(map, start, end) {
+        const queue = []
+        queue.push(start)
+        map[100 * start[0] + start[1]] = 2
+
+        while (queue.length) {
+            let [x, y] = queue.shift()
+            console.log([x, y])
+            if (x == end[0] && y == end[1]) {return true}
+            for (let i = 0; i < 4; i++) {
+                let newX = x + direc[i][0]
+                let newY = y + direc[i][1]
+                if (newX >= 0 && newX < 100 && newY >= 0 && newY < 100 && map[100 * newX + newY] == 0) {
+                    queue.push([newX, newY])
+                    map[100 * newX + newY] = 2
+                }
+            }
+        }
+
+        return false
+    }
 </script>
