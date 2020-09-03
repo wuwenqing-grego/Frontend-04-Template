@@ -64,29 +64,35 @@
 
     const direc = [[1, 0], [-1, 0], [0, 1], [0, -1]]
 
-    async function path(map, start, end) {
+    async function findPath(map, start, end) {
         const queue = []
-        queue.push(start)
+        queue.push([start, [100 * start[0] + start[1]]])
         map[100 * start[0] + start[1]] = 2
 
         while (queue.length) {
-            let [x, y] = queue.shift()
+            let [[x, y], path] = queue.shift()
             // console.log([x, y])
-            if (x == end[0] && y == end[1]) {return true}
+            if (x == end[0] && y == end[1]) {
+                while (path.length) {
+                    let pre = path.pop()
+                    await sleep(10)
+                    container.childNodes[pre].style.backgroundColor = 'purple'
+                }
+                return true
+            }
             for (let i = 0; i < 4; i++) {
                 let newX = x + direc[i][0]
                 let newY = y + direc[i][1]
                 let index = 100 * newX + newY
                 if (newX >= 0 && newX < 100 && newY >= 0 && newY < 100 && map[index] == 0) {
-                    queue.push([newX, newY])
-
-                    await sleep(1)
+                    queue.push([[newX, newY], [...path, index]])
+                    // await sleep(1)
                     container.childNodes[index].style.backgroundColor = 'yellow'
                     map[index] = 2
                 }
             }
         }
 
-        return false
+        return null
     }
 </script>
