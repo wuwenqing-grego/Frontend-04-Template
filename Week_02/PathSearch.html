@@ -65,7 +65,7 @@
 
     const direc = [[1, 0], [-1, 0], [0, 1], [0, -1]]
 
-    async function findPath(map, start, end) {
+    async function findPathBFS(map, start, end) {
         const queue = []
         queue.push([start, [100 * start[0] + start[1]]])
         map[100 * start[0] + start[1]] = 2
@@ -97,6 +97,42 @@
         return null
     }
 
+    async function findPathAStar(map, start, end) {
+        const queue = new MinHeap([], (a, b) => distance(a) - distance(b))
+        queue.insert([start, [100 * start[0] + start[1]]])
+        map[100 * start[0] + start[1]] = 2
+
+        function distance(data) {
+            return (data[0][0] - end[0]) ** 2 + (data[0][1] - end[1]) ** 2
+        }
+
+        while (queue.length()) {
+            let [[x, y], path] = queue.extract()
+            // console.log([x, y])
+            if (x == end[0] && y == end[1]) {
+                while (path.length) {
+                    let pre = path.pop()
+                    await sleep(10)
+                    container.childNodes[pre].style.backgroundColor = 'purple'
+                }
+                return true
+            }
+            for (let i = 0; i < 4; i++) {
+                let newX = x + direc[i][0]
+                let newY = y + direc[i][1]
+                let index = 100 * newX + newY
+                if (newX >= 0 && newX < 100 && newY >= 0 && newY < 100 && map[index] == 0) {
+                    queue.insert([[newX, newY], [...path, index]])
+                    await sleep(10)
+                    container.childNodes[index].style.backgroundColor = 'yellow'
+                    map[index] = 2
+                }
+            }
+        }
+
+        return null
+    }
+
     class MinHeap {
         constructor(data, compare) {
             this.heap = []
@@ -112,7 +148,7 @@
         }
 
         heapifyUp() {
-            let index = this.heap.length - 1
+            let index = this.length() - 1
             let parent = this.getParentIndex(index)
 
             while (index > 0 && this.compare(this.heap[index], this.heap[parent]) < 0) {
@@ -127,8 +163,8 @@
         }
 
         extract() {
-            if (!this.heap.length) {return null}
-            if (this.heap.length == 1) {return this.heap.pop()}
+            if (!this.length()) {return null}
+            if (this.length() == 1) {return this.heap.pop()}
 
             let min = this.heap[0]
             this.heap[0] = this.heap.pop()
@@ -143,8 +179,8 @@
             let leftChild = this.getLeftChildIndex(index)
             let rightChild = this.getRightChildIndex(index)
 
-            while (leftChild < this.heap.length) {
-                if (rightChild < this.heap.length && this.compare(this.heap[rightChild], this.heap[leftChild]) < 0) {
+            while (leftChild < this.length()) {
+                if (rightChild < this.length() && this.compare(this.heap[rightChild], this.heap[leftChild]) < 0) {
                     child = rightChild
                 } else {
                     child = leftChild
@@ -171,6 +207,10 @@
 
         swap(i, j) {
             [this.heap[i], this.heap[j]] = [this.heap[j], this.heap[i]]
+        }
+
+        length() {
+            return this.heap.length
         }
     }
 </script>
