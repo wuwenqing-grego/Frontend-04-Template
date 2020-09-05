@@ -16,7 +16,23 @@
 </style>
 
 <div id="container"></div>
-<button onclick="localStorage['map'] = JSON.stringify(map)">save</button>
+<button onclick="localStorage['map'] = JSON.stringify(map)">Map Save</button>
+<button onclick="run()">Run</button>
+<p>
+    StartX: <input type="text" id="startX">
+    StartY: <input type="text" id="startY">
+</p>
+<p>
+    EndX: <input type="text" id="endX">
+    EndX: <input type="text" id="endY">
+</p>
+<p>
+    Algorithm: 
+    <select name="algo" id="algo">
+        <option value="bfs">BFS</option>
+        <option value="astar">A*</option>
+    </select>
+</p>
 
 <script>
     // map editor
@@ -72,8 +88,8 @@
 
         while (queue.length) {
             let [[x, y], path] = queue.shift()
-            // console.log([x, y])
             if (x == end[0] && y == end[1]) {
+                console.log(path.length)
                 while (path.length) {
                     let pre = path.pop()
                     await sleep(10)
@@ -108,11 +124,11 @@
 
         while (queue.length()) {
             let [[x, y], path] = queue.extract()
-            // console.log([x, y])
             if (x == end[0] && y == end[1]) {
+                console.log(path.length)
                 while (path.length) {
                     let pre = path.pop()
-                    await sleep(10)
+                    await sleep(5)
                     container.childNodes[pre].style.backgroundColor = 'purple'
                 }
                 return true
@@ -123,7 +139,7 @@
                 let index = 100 * newX + newY
                 if (newX >= 0 && newX < 100 && newY >= 0 && newY < 100 && map[index] == 0) {
                     queue.insert([[newX, newY], [...path, index]])
-                    await sleep(10)
+                    await sleep(1)
                     container.childNodes[index].style.backgroundColor = 'yellow'
                     map[index] = 2
                 }
@@ -186,7 +202,7 @@
                     child = leftChild
                 }
 
-                if (this.heap[index] > this.heap[child]) {
+                if (this.compare(this.heap[index], this.heap[child]) > 0) {
                     this.swap(index, child)
                     index = child
                     leftChild = this.getLeftChildIndex(index)
@@ -212,5 +228,13 @@
         length() {
             return this.heap.length
         }
+    }
+
+    function run() {
+        let start = [+document.getElementById('startX').value, +document.getElementById('startY').value]
+        let end = [+document.getElementById('endX').value, +document.getElementById('endY').value]
+        let selection = document.getElementById('algo')
+        let algo = selection.options[selection.selectedIndex].value
+        algo == 'bfs' ? findPathBFS(map, start, end) : findPathAStar(map, start, end)
     }
 </script>
