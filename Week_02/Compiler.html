@@ -1,0 +1,21 @@
+<script>
+    let regexp = /([0-9\.]+)|([ \t]+)|([\r\n]+)|(\*)|(\/)|(\+)|(\-)/g
+    const dict = ['Number', 'Space', 'LineTerminator', '*', '/', '+', '-']
+
+    function tokenize(source) {
+        let result = null
+        while (true) {
+            result = regexp.exec(source)
+            if (!result) {break}
+
+            for (let i = 0; i < dict.length; i++) {
+                if (result[i + 1]) {
+                    console.log(dict[i])
+                }
+            }
+            console.log(result)
+        }
+    }
+
+    tokenize('12 + 1.1 - 0 / 1')
+</script>
